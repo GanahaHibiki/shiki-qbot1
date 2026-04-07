@@ -1,0 +1,35 @@
+services:
+  napcat:
+    image: mlikiowa/napcat-docker:latest
+    container_name: napcat
+    environment:
+      - ACCOUNT=${QQ_ACCOUNT}
+      - WSR_ENABLE=true
+      - WS_URLS=["ws://bot:8080"]
+    volumes:
+      - ./napcat/config:/app/napcat/config
+      - ./napcat/data:/app/.config/QQ
+    ports:
+      - "6099:6099"  # WebUI
+    restart: unless-stopped
+    networks:
+      - qq-bot
+
+  bot:
+    build: .
+    container_name: qq-bot
+    environment:
+      - WS_URL=ws://napcat:3001
+      - REPEAT_PROBABILITY=${REPEAT_PROBABILITY:-5}
+      - LOG_LEVEL=${LOG_LEVEL:-INFO}
+    volumes:
+      - ./config.yaml:/app/config.yaml:ro
+    depends_on:
+      - napcat
+    restart: unless-stopped
+    networks:
+      - qq-bot
+
+networks:
+  qq-bot:
+    driver: bridge

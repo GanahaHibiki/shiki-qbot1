@@ -1,0 +1,12 @@
+# 机器人配置
+bot:
+  # NapCat WebSocket 地址 (容器内使用服务名)
+  ws_url: "ws://napcat:3001"
+
+# 复读功能
+repeat:
+  enabled: true
+  probability: 5  # 复读概率 (0-100)
+
+# 日志级别
+log_level: "INFO"
