@@ -65,10 +65,17 @@ async def connect_and_run() -> None:
     while not shutdown_event.is_set():
         try:
             logger.info(f"连接到 {config.bot.ws_url}")
+
+            # 构建连接参数
+            headers = {}
+            if config.bot.token:
+                headers["Authorization"] = f"Bearer {config.bot.token}"
+
             async with websockets.connect(
                 config.bot.ws_url,
                 ping_interval=20,
                 ping_timeout=20,
+                additional_headers=headers,
             ) as ws:
                 logger.info("WebSocket 连接成功")
                 reconnect_delay = 5  # 重置重连延迟

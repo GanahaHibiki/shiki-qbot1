@@ -14,6 +14,7 @@ class RepeatConfig:
 @dataclass
 class BotConfig:
     ws_url: str = "ws://napcat:3001"
+    token: str = ""
 
 
 @dataclass
@@ -35,7 +36,8 @@ def load_config(config_path: str = "config.yaml") -> Config:
 
         if "bot" in data:
             config.bot = BotConfig(
-                ws_url=data["bot"].get("ws_url", config.bot.ws_url)
+                ws_url=data["bot"].get("ws_url", config.bot.ws_url),
+                token=data["bot"].get("token", config.bot.token),
             )
 
         if "repeat" in data:
@@ -49,6 +51,9 @@ def load_config(config_path: str = "config.yaml") -> Config:
     # 环境变量覆盖
     if ws_url := os.getenv("WS_URL"):
         config.bot.ws_url = ws_url
+
+    if token := os.getenv("WS_TOKEN"):
+        config.bot.token = token
 
     if prob := os.getenv("REPEAT_PROBABILITY"):
         config.repeat.probability = int(prob)

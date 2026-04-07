@@ -23,6 +23,7 @@ services:
     container_name: qq-bot
     environment:
       - WS_URL=ws://napcat:3001
+      - WS_TOKEN=${WS_TOKEN:-}
       - REPEAT_PROBABILITY=${REPEAT_PROBABILITY:-5}
       - LOG_LEVEL=${LOG_LEVEL:-INFO}
     volumes:
