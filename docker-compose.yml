@@ -16,7 +16,8 @@ services:
       - qq-bot
 
   bot:
-    build: .
+    image: ptshiki/shiki-qbot1:latest
+    # build: .  # 本地开发时取消注释
     container_name: qq-bot
     environment:
       - WS_URL=ws://napcat:3001

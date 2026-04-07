@@ -151,3 +151,25 @@ handlers: list[MessageHandler] = [
 - **日志**: 记录所有收发消息，便于调试
 - **重连**: WebSocket 断开后自动重连
 - **优雅退出**: 收到 SIGTERM 时正常关闭连接
+
+## CI/CD
+
+### 版本管理
+
+- 版本号存储在 `VERSION` 文件中
+- 格式: `MAJOR.MINOR.PATCH` (如 `0.2.1`)
+- 初始版本: `0.2.1`
+
+### GitHub Actions 自动构建
+
+- **触发条件**: push 到 main 分支
+- **构建流程**:
+  1. 读取当前版本号
+  2. 自增 PATCH 版本 (如 `0.2.1` -> `0.2.2`)
+  3. 构建 Docker 镜像
+  4. 推送到 Docker Hub: `ptshiki/shiki-qbot1`
+  5. 提交更新后的版本号到仓库
+- **镜像标签**: `latest` + 版本号 (如 `0.2.2`)
+- **Secrets 依赖**:
+  - `DOCKERHUB_USERNAME`: Docker Hub 用户名
+  - `DOCKERHUB_TOKEN`: Docker Hub Access Token
