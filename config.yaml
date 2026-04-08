@@ -8,5 +8,13 @@ repeat:
   enabled: true
   probability: 5  # 复读概率 (0-100)
 
+# AI回复功能
+ai_reply:
+  enabled: false  # 是否启用AI回复
+  probability: 10  # AI回复概率 (0-100)
+  api_key: ""  # SiliconFlow API Key (或使用环境变量 AI_API_KEY)
+  model: "deepseek-ai/DeepSeek-V3"  # AI模型
+  system_prompt: "你是一个活泼可爱的群聊助手，喜欢用简洁幽默的方式回复消息。请用1-2句话自然地回应用户，不要过于正式。"
+
 # 日志级别
 log_level: "INFO"

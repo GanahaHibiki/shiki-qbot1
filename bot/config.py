@@ -12,6 +12,15 @@ class RepeatConfig:
 
 
 @dataclass
+class AIReplyConfig:
+    enabled: bool = False
+    probability: int = 10  # 0-100
+    api_key: str = ""
+    model: str = "deepseek-ai/DeepSeek-V3"
+    system_prompt: str = "你是一个活泼可爱的群聊助手，喜欢用简洁幽默的方式回复消息。请用1-2句话自然地回应用户，不要过于正式。"
+
+
+@dataclass
 class BotConfig:
     ws_url: str = "ws://napcat:3001"
     token: str = ""
@@ -21,6 +30,7 @@ class BotConfig:
 class Config:
     bot: BotConfig = field(default_factory=BotConfig)
     repeat: RepeatConfig = field(default_factory=RepeatConfig)
+    ai_reply: AIReplyConfig = field(default_factory=AIReplyConfig)
     log_level: str = "INFO"
 
 
@@ -46,6 +56,15 @@ def load_config(config_path: str = "config.yaml") -> Config:
                 probability=data["repeat"].get("probability", config.repeat.probability),
             )
 
+        if "ai_reply" in data:
+            config.ai_reply = AIReplyConfig(
+                enabled=data["ai_reply"].get("enabled", config.ai_reply.enabled),
+                probability=data["ai_reply"].get("probability", config.ai_reply.probability),
+                api_key=data["ai_reply"].get("api_key", config.ai_reply.api_key),
+                model=data["ai_reply"].get("model", config.ai_reply.model),
+                system_prompt=data["ai_reply"].get("system_prompt", config.ai_reply.system_prompt),
+            )
+
         config.log_level = data.get("log_level", config.log_level)
 
     # 环境变量覆盖
@@ -57,6 +76,15 @@ def load_config(config_path: str = "config.yaml") -> Config:
 
     if prob := os.getenv("REPEAT_PROBABILITY"):
         config.repeat.probability = int(prob)
+
+    if ai_api_key := os.getenv("AI_API_KEY"):
+        config.ai_reply.api_key = ai_api_key
+
+    if ai_model := os.getenv("AI_MODEL"):
+        config.ai_reply.model = ai_model
+
+    if ai_prob := os.getenv("AI_REPLY_PROBABILITY"):
+        config.ai_reply.probability = int(ai_prob)
 
     if log_level := os.getenv("LOG_LEVEL"):
         config.log_level = log_level

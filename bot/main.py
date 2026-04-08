@@ -9,7 +9,7 @@ import websockets
 from websockets.exceptions import ConnectionClosed
 
 from config import load_config, Config
-from handlers import RepeatHandler, MessageHandler
+from handlers import RepeatHandler, MessageHandler, AIReplyHandler
 
 # 全局配置
 config: Config = None
@@ -117,10 +117,12 @@ def main() -> None:
     logger.info("QQ Bot 启动中...")
     logger.info(f"WebSocket URL: {config.bot.ws_url}")
     logger.info(f"复读功能: {'开启' if config.repeat.enabled else '关闭'}, 概率: {config.repeat.probability}%")
+    logger.info(f"AI回复功能: {'开启' if config.ai_reply.enabled else '关闭'}, 概率: {config.ai_reply.probability}%")
 
     # 初始化处理器
     handlers = [
         RepeatHandler(config),
+        AIReplyHandler(config),
     ]
 
     # 注册信号处理
